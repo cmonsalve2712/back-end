@@ -17,7 +17,7 @@ server.use("/api/auth", AuthRouter);
 server.use("/api/users", restricted, UserRouter);
 
 server.get("/", (req, res) => {
-  res.json({ server: "up" });
+  res.json({ server: "up and running" });
 });
 
 module.exports = server;

@@ -1,27 +1,29 @@
+const pg = require("pg");
+
+const localConnection = "postgresql://localhost/recipes";
+let connection;
+
+if (process.env.DATABASE_URL) {
+  pg.defaults.ssl = { rejectUnauthorized: false };
+  connection = process.env.DATABASE_URL;
+} else {
+  connection = localConnection;
+}
+
 const sharedConfig = {
-  client: "sqlite3",
-  useNullAsDefault: true,
-  migrations: { directory: "./data/migrations" },
+  client: "pg",
+  connection,
+  migrations: { directory: "./api/data/migrations" },
+  seeds: { directory: "./api/data/seeds" },
   pool: {
     afterCreate: (conn, done) => conn.run("PRAGMA foreign_keys = ON", done),
   },
 };
 
 module.exports = {
-  development: {
-    ...sharedConfig,
-    connection: { filename: "./data/secret-family-recipes.db3" },
-    seeds: { directory: "./data/seeds" },
-  },
-  testing: {
-    ...sharedConfig,
-    connection: { filename: "./data/test.db3" },
-  },
+  development: { ...sharedConfig },
   production: {
-    client: "pg",
-    useNullAsDefault: true,
-    connection: process.env.DATABASE_URL,
-    migrations: { directory: "./data/migrations" },
-    seeds: { directory: "./data/seeds" },
+    ...sharedConfig,
+    pool: { min: 2, max: 10 },
   },
 };

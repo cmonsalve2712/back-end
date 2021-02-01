@@ -6,12 +6,16 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "migrateup": "knex migrate:up",
-    "migratedown": "knex migrate:down",
+    "migrateh": "heroku run knex migrate:latest -a back-end",
+    "rollbackh": "heroku run knex migrate:rollback -a back-end",
     "migratelatest": "knex migrate:latest",
     "migraterollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "test": "jest --watchAll"
+  },
+  "engines": {
+    "node": "14.15.4",
+    "npm": "6.14.11"
   },
   "repository": {
     "type": "git",
@@ -33,8 +37,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.16",
     "knex-cleaner": "^1.3.1",
-    "pg": "^8.5.1",
-    "sqlite3": "^5.0.1"
+    "pg": "^8.5.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
